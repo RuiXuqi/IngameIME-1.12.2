@@ -17,11 +17,13 @@ public class MixinEarly implements IFMLLoadingPlugin, IEarlyMixinLoader {
         return Collections.singletonList("mixins.ingameime.vanilla.json");
     }
 
+    @Nullable
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return null;
     }
 
+    @Nullable
     @Override
     public String getModContainerClass() {
         return null;
@@ -37,6 +39,7 @@ public class MixinEarly implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public void injectData(Map<String, Object> data) {
     }
 
+    @Nullable
     @Override
     public String getAccessTransformerClass() {
         return null;

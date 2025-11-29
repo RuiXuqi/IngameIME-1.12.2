@@ -14,18 +14,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMinecraft {
 
     @Unique
-    private static boolean imeActivatedBeforeFullscreen;
+    private static boolean ingameIME$imeActivatedBeforeFullscreen;
 
     @Inject(method = "toggleFullscreen", at = @At(value = "HEAD"))
     private void preToggleFullscreen(CallbackInfo ci) {
-        imeActivatedBeforeFullscreen = Internal.getActivated();
+        ingameIME$imeActivatedBeforeFullscreen = Internal.getActivated();
         Internal.destroyInputCtx();
     }
 
     @Inject(method = "toggleFullscreen", at = @At(value = "RETURN"))
     private void postToggleFullscreen(CallbackInfo ci) {
         Internal.createInputCtx();
-        Internal.setActivated(imeActivatedBeforeFullscreen);
+        Internal.setActivated(ingameIME$imeActivatedBeforeFullscreen);
     }
 
     @Inject(method = "displayGuiScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiScreen;onGuiClosed()V"))

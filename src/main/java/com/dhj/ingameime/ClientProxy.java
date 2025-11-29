@@ -57,6 +57,7 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
         return IMEventHandler;
     }
 
+    @Override
     public void preInit(@Nonnull FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         ClientRegistry.registerKeyBinding(KeyBind);
