@@ -13,7 +13,8 @@ import org.apache.logging.log4j.Logger;
         clientSideOnly = true,
         acceptedMinecraftVersions = "[1.12.2]",
         acceptableRemoteVersions = "*",
-        dependencies = "required-after:mixinbooter@[8.0,)"
+        dependencies = "required-after:mixinbooter@[8.0,)",
+        guiFactory = "com.dhj.ingameime.ConfigGuiFactory"
 )
 public class IngameIME_Forge {
     public static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME);

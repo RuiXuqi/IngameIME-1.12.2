@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,13 +54,20 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onConfigChanged(@Nonnull ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(Tags.MOD_ID)) {
+            Config.sync();
+        }
+    }
+
     public static IMEventHandler getIMEventHandler() {
         return IMEventHandler;
     }
 
     @Override
     public void preInit(@Nonnull FMLPreInitializationEvent event) {
-        Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
+        Config.init(event.getSuggestedConfigurationFile());
         ClientRegistry.registerKeyBinding(KeyBind);
         Internal.loadLibrary();
         Internal.createInputCtx();

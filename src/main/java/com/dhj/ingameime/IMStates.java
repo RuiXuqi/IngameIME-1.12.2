@@ -57,7 +57,7 @@ public enum IMStates implements IMEventHandler {
     OpenedManual {
         @Override
         public IMStates onMouseMove() {
-            if (!Config.TurnOffOnMouseMove.getBoolean()) return this;
+            if (!Config.TurnOffOnMouseMove) return this;
             Internal.setActivated(false);
             IngameIME_Forge.LOG.info("Turned off by mouse move");
             return Disabled;

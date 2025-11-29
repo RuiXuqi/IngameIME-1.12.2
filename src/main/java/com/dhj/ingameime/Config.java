@@ -7,51 +7,71 @@ import java.io.File;
 import java.util.Arrays;
 
 public class Config {
-    // API
-    public static Property API_Windows = null;
-    public static Property UiLess_Windows = null;
-    // General
-    public static Property TurnOffOnMouseMove = null;
-    // Mode Text
-    public static Property AlphaModeText = null;
-    public static Property NativeModeText = null;
+    private static Configuration config;
+    public static final String[] CATEGORIES = new String[]{"api", "uiless", "general", "modetext"};
 
-    public static void synchronizeConfiguration(File configFile) {
-        Configuration configuration = new Configuration(configFile);
+    public static String API_Windows = "TextServiceFramework";
+    public static boolean UiLess_Windows = true;
 
-        API_Windows = configuration.get("API",
-                "Windows",
-                "TextServiceFramework",
-                "Config the API to use in Windows platform (TextServiceFramework, Imm32)"
-        );
-        API_Windows.setValidValues(new String[]{"TextServiceFramework", "Imm32"});
-        if (Arrays.stream(API_Windows.getValidValues()).noneMatch(it -> it.equals(API_Windows.getString())))
-            API_Windows.set(API_Windows.getDefault());
-        API_Windows.setRequiresMcRestart(true);
+    public static boolean TurnOffOnMouseMove = true;
 
-        UiLess_Windows = configuration.get("UiLess",
-                "Windows",
-                true,
-                "Config if render CandidateList in game");
-        UiLess_Windows.setRequiresMcRestart(true);
+    public static String AlphaModeText = "A";
+    public static String NativeModeText = "中";
 
-        TurnOffOnMouseMove = configuration.get("General",
-                "TurnOffOnMouseMove",
-                true,
-                "Turn off InputMethod on mouse move");
-
-        AlphaModeText = configuration.get("ModeText",
-                "AlphaMode",
-                "A",
-                "Text to display when in Alpha mode");
-
-        NativeModeText = configuration.get("ModeText",
-                "NativeMode",
-                "中",
-                "Text to display when in Native mode");
-
-        if (configuration.hasChanged()) {
-            configuration.save();
+    public static void init(File configFile) {
+        if (config == null) {
+            config = new Configuration(configFile);
+            config.load();
         }
+        sync();
+    }
+
+    public static void sync() {
+        final Property P_API_Windows = config.get(
+                CATEGORIES[0],
+                "Windows",
+                API_Windows,
+                "Config the API to use in Windows platform (TextServiceFramework, Imm32)"
+        ).setValidValues(new String[]{"TextServiceFramework", "Imm32"}).setRequiresMcRestart(true);
+        if (Arrays.stream(P_API_Windows.getValidValues()).noneMatch(it -> it.equals(P_API_Windows.getString()))) {
+            P_API_Windows.set(P_API_Windows.getDefault());
+        }
+        API_Windows = P_API_Windows.getString();
+
+        UiLess_Windows = config.get(
+                CATEGORIES[1],
+                "Windows",
+                UiLess_Windows,
+                "Config if render CandidateList in game"
+        ).setRequiresMcRestart(true).getBoolean();
+
+        TurnOffOnMouseMove = config.get(
+                CATEGORIES[2],
+                "TurnOffOnMouseMove",
+                TurnOffOnMouseMove,
+                "Turn off InputMethod on mouse move"
+        ).getBoolean();
+
+        AlphaModeText = config.get(
+                CATEGORIES[3],
+                "AlphaMode",
+                AlphaModeText,
+                "Text to display when in Alpha mode"
+        ).getString();
+
+        NativeModeText = config.get(
+                CATEGORIES[3],
+                "NativeMode",
+                NativeModeText,
+                "Text to display when in Native mode"
+        ).getString();
+
+        if (config.hasChanged()) {
+            config.save();
+        }
+    }
+
+    public static Configuration getConfig() {
+        return config;
     }
 }
