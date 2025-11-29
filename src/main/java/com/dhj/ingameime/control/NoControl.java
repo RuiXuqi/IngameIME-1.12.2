@@ -2,6 +2,8 @@ package com.dhj.ingameime.control;
 
 import com.dhj.ingameime.Internal;
 
+import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 
 public class NoControl implements IControl {
@@ -33,14 +35,10 @@ public class NoControl implements IControl {
         return Internal.getActivated();
     }
 
+    @Nonnull
     @Override
-    public int getCursorX() {
-        return this.x;
-    }
-
-    @Override
-    public int getCursorY() {
-        return this.y;
+    public Point getCursorPos() {
+        return new Point(this.x, this.y);
     }
 
     public void setCursorX(int x) {

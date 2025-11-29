@@ -15,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 
 public class ClientProxy extends CommonProxy implements IMEventHandler {
     public static ClientProxy INSTANCE = null;
@@ -31,7 +32,8 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
     @SubscribeEvent
     public void onRenderScreen(GuiScreenEvent.DrawScreenEvent.Post event) {
         if (IMStates.getActiveControl().isVisible()) {
-            ClientProxy.Screen.setCaretPos(IMStates.getActiveControl().getCursorX(), IMStates.getActiveControl().getCursorY());
+            Point position = IMStates.getActiveControl().getCursorPos();
+            ClientProxy.Screen.setCaretPos(position.x, position.y);
             ClientProxy.Screen.draw();
         }
 
