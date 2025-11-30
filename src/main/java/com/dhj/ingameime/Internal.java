@@ -175,7 +175,7 @@ public class Internal {
         boolean isWindows = LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS;
 
         if (!isWindows) {
-            LOG.info("Unsupported platform: {}", LWJGLUtil.getPlatformName());
+            LOG.error("Unsupported platform: {}", LWJGLUtil.getPlatformName());
             return;
         }
 
@@ -213,7 +213,7 @@ public class Internal {
 
         try {
             InputCtx.setActivated(activated);
-            LOG.info("IM active state: {}", activated);
+            IngameIME_Forge.logDebugInfo("IM active state: {}", activated);
         } catch (Throwable t) {
             LOG.error("Failed to set IME active state. This indicates the InputContext may be stale. Attempting to recover.", t);
 

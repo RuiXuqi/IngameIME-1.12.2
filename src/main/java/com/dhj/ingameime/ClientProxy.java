@@ -100,6 +100,7 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
 
     @Override
     public IMStates onScreenOpen(GuiScreen screen) {
+        IngameIME_Forge.logDebugInfo("Screen opened {}", screen);
         IMEventHandler newEventHandler = IMEventHandler.onScreenOpen(screen);
         if (newEventHandler != IMEventHandler) {
             IMEventHandler.onLeaveState();

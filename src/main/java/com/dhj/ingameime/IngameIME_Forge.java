@@ -21,6 +21,13 @@ public class IngameIME_Forge {
     @SidedProxy(clientSide = "com.dhj.ingameime.ClientProxy", serverSide = "com.ingameime.CommonProxy")
     public static CommonProxy proxy;
 
+    /**
+     * For some not important logs.
+     */
+    public static void logDebugInfo(String message, Object... params) {
+        if (Config.DebugLog) LOG.info(message, params);
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);

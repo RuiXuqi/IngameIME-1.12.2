@@ -26,7 +26,7 @@ public enum IMStates implements IMEventHandler {
         public IMStates onControlFocus(@Nonnull IControl control, boolean focused, boolean isOverlay) {
             if (focused) {
                 setControl(control, isOverlay);
-                IngameIME_Forge.LOG.info("Opened by control focus: {}", control.getClass().getSimpleName());
+                IngameIME_Forge.logDebugInfo("Opened by control focus: {}", control.getClass().getSimpleName());
                 Internal.setActivated(true);
                 return OpenedAuto;
             } else {
@@ -36,7 +36,7 @@ public enum IMStates implements IMEventHandler {
 
         @Override
         public IMStates onToggleKey() {
-            IngameIME_Forge.LOG.info("Turned on by toggle key");
+            IngameIME_Forge.logDebugInfo("Turned on by toggle key");
             Internal.setActivated(true);
             return OpenedManual;
         }
@@ -59,7 +59,7 @@ public enum IMStates implements IMEventHandler {
         public IMStates onMouseMove() {
             if (!Config.TurnOffOnMouseMove) return this;
             Internal.setActivated(false);
-            IngameIME_Forge.LOG.info("Turned off by mouse move");
+            IngameIME_Forge.logDebugInfo("Turned off by mouse move");
             return Disabled;
         }
     },
@@ -78,10 +78,10 @@ public enum IMStates implements IMEventHandler {
                     setControl(NoControl.NO_CONTROL, isOverlay);
                     if (IMStates.getActiveControl() != NoControl.NO_CONTROL) {
                         Internal.setActivated(true);
-                        IngameIME_Forge.LOG.info("Focus changed from Overlay {} to Common {}", control.getClass().getSimpleName(), IMStates.getActiveControl().getClass().getSimpleName());
+                        IngameIME_Forge.logDebugInfo("Focus changed from Overlay {} to Common {}", control.getClass().getSimpleName(), IMStates.getActiveControl().getClass().getSimpleName());
                         return this;
                     }
-                    IngameIME_Forge.LOG.info("Turned off by losing control focus: {}", control.getClass().getSimpleName());
+                    IngameIME_Forge.logDebugInfo("Turned off by losing control focus: {}", control.getClass().getSimpleName());
                     return Disabled;
                 }
                 return this;
@@ -90,7 +90,7 @@ public enum IMStates implements IMEventHandler {
             // Update active focused control
             if (changed) Internal.setActivated(false); // Simply empty the typing list
             setControl(control, isOverlay);
-            if (changed) IngameIME_Forge.LOG.info("Opened by control focus: {}", control.getClass().getSimpleName());
+            if (changed) IngameIME_Forge.logDebugInfo("Opened by control focus: {}", control.getClass().getSimpleName());
             Internal.setActivated(true);
             ClientProxy.Screen.WInputMode.setActive(true);
             return this;
@@ -129,7 +129,7 @@ public enum IMStates implements IMEventHandler {
 
     @Override
     public IMStates onToggleKey() {
-        IngameIME_Forge.LOG.info("Turned off by toggle key");
+        IngameIME_Forge.logDebugInfo("Turned off by toggle key");
         Internal.setActivated(false);
         return Disabled;
     }
