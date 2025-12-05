@@ -2,7 +2,8 @@ package com.dhj.ingameime.gui;
 
 import com.dhj.ingameime.Internal;
 import ingameime.InputContext;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import org.lwjgl.opengl.GL11;
 
 public class OverlayScreen extends Widget {
     public WidgetPreEdit PreEdit = new WidgetPreEdit();
@@ -24,22 +25,22 @@ public class OverlayScreen extends Widget {
     public void draw() {
         if (!isActive()) return;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.translate(0, 0, 30f);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL11.GL_BLEND);
+        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GL11.glTranslatef(0, 0, 30f);
 
         PreEdit.draw();
         CandidateList.draw();
         WInputMode.draw();
 
-        GlStateManager.enableDepth();
-        GlStateManager.disableBlend();
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_BLEND);
 
-        GlStateManager.popMatrix();
+        GL11.glPopMatrix();
     }
 
     public void setCaretPos(int x, int y) {

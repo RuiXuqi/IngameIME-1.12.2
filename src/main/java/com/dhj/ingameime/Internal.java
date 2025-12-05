@@ -1,8 +1,8 @@
 package com.dhj.ingameime;
 
+import cpw.mods.fml.common.Loader;
 import ingameime.*;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 
@@ -90,7 +90,7 @@ public class Internal {
 
         LOG.info("Using IngameIME-Native: {}", InputContext.getVersion());
 
-        long hWnd = Loader.isModLoaded("cleanroom") ? getWindowHandle_LWJGL3() : getWindowHandle_LWJGL2();
+        long hWnd = Loader.isModLoaded("lwjgl3ify") ? getWindowHandle_LWJGL3() : getWindowHandle_LWJGL2();
         if (hWnd != 0) {
             if (Minecraft.getMinecraft().isFullScreen()) {
                 Config.UiLess_Windows = true;
@@ -124,13 +124,7 @@ public class Internal {
             @Override
             protected void call(String text) {
                 try {
-                    Minecraft.getMinecraft().addScheduledTask(() -> {
-                        try {
-                            IMStates.getActiveControl().writeText(text);
-                        } catch (Throwable e) {
-                            LOG.error("Exception thrown during scheduled commit task", e);
-                        }
-                    });
+                    IMStates.getActiveControl().writeText(text);
                 } catch (Throwable e) {
                     LOG.error("Exception thrown when scheduling commit callback", e);
                 }

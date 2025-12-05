@@ -24,7 +24,7 @@ public class VanillaTextFieldControl<T extends GuiTextField> extends AbstractCon
         AccessorGuiTextField accessor = (AccessorGuiTextField) this.controlObject;
         return AbstractControl.getCursorPos(
                 accessor.getFont(), this.controlObject.getText(),
-                this.controlObject.x, this.controlObject.y, this.controlObject.width, this.controlObject.height,
+                this.controlObject.xPosition, this.controlObject.yPosition, this.controlObject.width, this.controlObject.height,
                 accessor.getLineScrollOffset(), this.controlObject.getCursorPosition(), this.controlObject.getSelectionEnd(),
                 this.controlObject.getEnableBackgroundDrawing()
         );

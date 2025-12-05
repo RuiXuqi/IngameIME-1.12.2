@@ -10,6 +10,6 @@ public interface AccessorGuiTextField {
     @Accessor("lineScrollOffset")
     int getLineScrollOffset();
 
-    @Accessor("fontRenderer")
+    @Accessor("field_146211_a")
     FontRenderer getFont();
 }

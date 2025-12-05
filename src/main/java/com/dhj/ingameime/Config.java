@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Config {
     public static final String[] CATEGORIES = new String[]{"api", "uiless", "general", "modetext", "debug"};
-    private static final String PREFIX = Tags.MOD_ID + ".config.";
+    private static final String PREFIX = IngameIME_Forge.MOD_ID + ".config.";
 
     private static Configuration config;
 

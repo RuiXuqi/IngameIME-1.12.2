@@ -30,7 +30,7 @@ public class Widget extends Gui {
             Y += mc.fontRenderer.FONT_HEIGHT;
         }
 
-        ScaledResolution scaledresolution = new ScaledResolution(mc);
+        ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         int displayHeight = scaledresolution.getScaledHeight();
         int displayWidth = scaledresolution.getScaledWidth();
 

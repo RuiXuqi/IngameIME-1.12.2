@@ -1,6 +1,9 @@
 package com.dhj.ingameime.control;
 
+import codechicken.nei.guihook.GuiContainerManager;
 import com.dhj.ingameime.mixins.vanilla.AccessorGuiScreen;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,12 +36,24 @@ public abstract class AbstractControl<T> implements IControl {
      * Universal write method.
      */
     public static void writeCurrentScreenText(String text) throws IOException {
+        if (Loader.isModLoaded("NotEnoughItems") && writeCurrentScreenTextNEI(text)) return;
         final GuiScreen screen = Minecraft.getMinecraft().currentScreen;
         if (screen != null) {
             for (char c : text.toCharArray()) {
                 ((AccessorGuiScreen) screen).callKeyTyped(c, Keyboard.KEY_NONE);
             }
         }
+    }
+
+    @Optional.Method(modid = "NotEnoughItems")
+    private static boolean writeCurrentScreenTextNEI(String string) {
+        if (GuiContainerManager.getManager() != null) {
+            for (char c : string.toCharArray()) {
+                GuiContainerManager.getManager().keyTyped(c, Keyboard.KEY_NONE);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -73,24 +88,24 @@ public abstract class AbstractControl<T> implements IControl {
         return new Point(currentDrawX - 1, cursorY);
     }
 
-    /**
-     * Get cursor position like vanilla text field. Will calculate GuiContainer offset.
-     *
-     * @param screen any screens
-     */
-    @SuppressWarnings("SameParameterValue")
-    protected static @Nonnull Point getContainerCursorPos(
-            @Nullable GuiScreen screen, @Nonnull FontRenderer font, @Nonnull String text,
-            int x, int y, int width, int height,
-            int lineScrollOffset, int cursorPosition, int selectionEnd,
-            boolean enableBackgroundDrawing
-    ) {
-        Point position = getCursorPos(font, text, x, y, width, height, lineScrollOffset, cursorPosition, selectionEnd, enableBackgroundDrawing);
-        if (screen instanceof GuiContainer) {
-            GuiContainer container = (GuiContainer) screen;
-            position.x += container.getGuiLeft();
-            position.y += container.getGuiTop();
-        }
-        return position;
-    }
+//    /**
+//     * Get cursor position like vanilla text field. Will calculate GuiContainer offset.
+//     *
+//     * @param screen any screens
+//     */
+//    @SuppressWarnings("SameParameterValue")
+//    protected static @Nonnull Point getContainerCursorPos(
+//            @Nullable GuiScreen screen, @Nonnull FontRenderer font, @Nonnull String text,
+//            int x, int y, int width, int height,
+//            int lineScrollOffset, int cursorPosition, int selectionEnd,
+//            boolean enableBackgroundDrawing
+//    ) {
+//        Point position = getCursorPos(font, text, x, y, width, height, lineScrollOffset, cursorPosition, selectionEnd, enableBackgroundDrawing);
+//        if (screen instanceof GuiContainer) {
+//            GuiContainer container = (GuiContainer) screen;
+//            position.x += container.getGuiLeft();
+//            position.y += container.getGuiTop();
+//        }
+//        return position;
+//    }
 }

@@ -1,23 +1,25 @@
 package com.dhj.ingameime;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(
-        modid = Tags.MOD_ID,
+        modid = IngameIME_Forge.MOD_ID,
         version = Tags.VERSION,
-        name = Tags.MOD_NAME,
-        clientSideOnly = true,
-        acceptedMinecraftVersions = "[1.12.2]",
+        name = IngameIME_Forge.MOD_NAME,
+        acceptedMinecraftVersions = "[1.7.10]",
         acceptableRemoteVersions = "*",
-        dependencies = "required-after:mixinbooter@[8.0,)",
+        dependencies = "",
         guiFactory = "com.dhj.ingameime.ConfigGuiFactory"
 )
 public class IngameIME_Forge {
-    public static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME);
+    public static final String MOD_ID = "ingameime";
+    public static final String MOD_NAME = "IngameIME";
+
+    public static final Logger LOG = LogManager.getLogger(MOD_NAME);
     @SidedProxy(clientSide = "com.dhj.ingameime.ClientProxy", serverSide = "com.ingameime.CommonProxy")
     public static CommonProxy proxy;
 
