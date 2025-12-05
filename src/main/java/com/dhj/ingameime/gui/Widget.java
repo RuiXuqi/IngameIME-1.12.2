@@ -19,16 +19,18 @@ public class Widget extends Gui {
     }
 
     public void layout() {
+        Minecraft mc = Minecraft.getMinecraft();
+
         int totalWidth = Width + 2 * Padding;
         int totalHeight = Height + 2 * Padding;
 
         X = offsetX;
         Y = offsetY;
         if (!DrawInline) {
-            Y += Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
+            Y += mc.fontRenderer.FONT_HEIGHT;
         }
 
-        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+        ScaledResolution scaledresolution = new ScaledResolution(mc);
         int displayHeight = scaledresolution.getScaledHeight();
         int displayWidth = scaledresolution.getScaledWidth();
 

@@ -22,7 +22,7 @@ public class IngameIME_Forge {
     public static CommonProxy proxy;
 
     /**
-     * For some not important logs.
+     * For some logs which are not important most time.
      */
     public static void logDebugInfo(String message, Object... params) {
         if (Config.DebugLog) LOG.info(message, params);

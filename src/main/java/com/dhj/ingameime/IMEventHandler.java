@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 public interface IMEventHandler {
     /**
      * Called before the new screen is displayed.
+     *
+     * @return New IMStates to be set
      */
     IMStates onScreenClose();
 
