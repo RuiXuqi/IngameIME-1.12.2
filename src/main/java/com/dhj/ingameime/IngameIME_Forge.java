@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
         name = IngameIME_Forge.MOD_NAME,
         acceptedMinecraftVersions = "[1.7.10]",
         acceptableRemoteVersions = "*",
-        dependencies = "",
+        dependencies = "required-after:unimixins",
         guiFactory = "com.dhj.ingameime.ConfigGuiFactory"
 )
 public class IngameIME_Forge {
