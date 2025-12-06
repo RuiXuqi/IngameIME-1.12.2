@@ -4,9 +4,12 @@ import com.dhj.ingameime.mixins.vanilla.AccessorGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class AbstractControl<T> implements IControl {
@@ -39,10 +42,16 @@ public abstract class AbstractControl<T> implements IControl {
     }
 
     /**
-     * Get cursor X like vanilla text field.
+     * Get cursor position like vanilla text field.
      */
-    protected static int getCursorX(@Nonnull FontRenderer font, @Nonnull String text, int x, int width, int lineScrollOffset, int cursorPosition, int selectionEnd, boolean enableBackgroundDrawing) {
+    protected static @Nonnull Point getCursorPos(
+            @Nonnull FontRenderer font, @Nonnull String text,
+            int x, int y, int width, int height,
+            int lineScrollOffset, int cursorPosition, int selectionEnd,
+            boolean enableBackgroundDrawing
+    ) {
         String visibleText = font.trimStringToWidth(text.substring(lineScrollOffset), width);
+        int cursorY = (enableBackgroundDrawing ? y + (height - 8) / 2 : y) - 1;
 
         int cursorPosRelative = cursorPosition - lineScrollOffset;
         int selectionEndRelative = selectionEnd - lineScrollOffset;
@@ -53,18 +62,35 @@ public abstract class AbstractControl<T> implements IControl {
         }
 
         if (!visibleText.isEmpty()) {
-            if (selectionEndRelative != cursorPosRelative) return currentDrawX; // Perform when Ctrl + A
+            if (selectionEndRelative != cursorPosRelative) {
+                // Perform when Ctrl + A
+                return new Point(currentDrawX - 1, cursorY);
+            }
             String rawTextBeforeCursor = visibleText.substring(0, cursorPosRelative);
             currentDrawX += font.getStringWidth(rawTextBeforeCursor);
         }
 
-        return currentDrawX - 1;
+        return new Point(currentDrawX - 1, cursorY);
     }
 
     /**
-     * Get cursor Y like vanilla text field.
+     * Get cursor position like vanilla text field. Will calculate GuiContainer offset.
+     *
+     * @param screen any screens
      */
-    protected static int getCursorY(int y, int height, boolean enableBackgroundDrawing) {
-        return (enableBackgroundDrawing ? y + (height - 8) / 2 : y) - 1;
+    @SuppressWarnings("SameParameterValue")
+    protected static @Nonnull Point getContainerCursorPos(
+            @Nullable GuiScreen screen, @Nonnull FontRenderer font, @Nonnull String text,
+            int x, int y, int width, int height,
+            int lineScrollOffset, int cursorPosition, int selectionEnd,
+            boolean enableBackgroundDrawing
+    ) {
+        Point position = getCursorPos(font, text, x, y, width, height, lineScrollOffset, cursorPosition, selectionEnd, enableBackgroundDrawing);
+        if (screen instanceof GuiContainer) {
+            GuiContainer container = (GuiContainer) screen;
+            position.x += container.getGuiLeft();
+            position.y += container.getGuiTop();
+        }
+        return position;
     }
 }

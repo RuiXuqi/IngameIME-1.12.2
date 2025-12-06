@@ -7,51 +7,82 @@ import java.io.File;
 import java.util.Arrays;
 
 public class Config {
-    // API
-    public static Property API_Windows = null;
-    public static Property UiLess_Windows = null;
-    // General
-    public static Property TurnOffOnMouseMove = null;
-    // Mode Text
-    public static Property AlphaModeText = null;
-    public static Property NativeModeText = null;
+    public static final String[] CATEGORIES = new String[]{"api", "uiless", "general", "modetext", "debug"};
+    private static final String PREFIX = Tags.MOD_ID + ".config.";
 
-    public static void synchronizeConfiguration(File configFile) {
-        Configuration configuration = new Configuration(configFile);
+    private static Configuration config;
 
-        API_Windows = configuration.get("API",
-                "Windows",
-                "TextServiceFramework",
-                "Config the API to use in Windows platform (TextServiceFramework, Imm32)"
-        );
-        API_Windows.setValidValues(new String[]{"TextServiceFramework", "Imm32"});
-        if (Arrays.stream(API_Windows.getValidValues()).noneMatch(it -> it.equals(API_Windows.getString())))
-            API_Windows.set(API_Windows.getDefault());
-        API_Windows.setRequiresMcRestart(true);
+    public static String API_Windows = "TextServiceFramework";
+    public static boolean UiLess_Windows = true;
 
-        UiLess_Windows = configuration.get("UiLess",
-                "Windows",
-                true,
-                "Config if render CandidateList in game");
-        UiLess_Windows.setRequiresMcRestart(true);
+    public static boolean TurnOffOnMouseMove = true;
 
-        TurnOffOnMouseMove = configuration.get("General",
-                "TurnOffOnMouseMove",
-                true,
-                "Turn off InputMethod on mouse move");
+    public static String AlphaModeText = "A";
+    public static String NativeModeText = "中";
 
-        AlphaModeText = configuration.get("ModeText",
-                "AlphaMode",
-                "A",
-                "Text to display when in Alpha mode");
+    public static boolean DebugLog = false;
 
-        NativeModeText = configuration.get("ModeText",
-                "NativeMode",
-                "中",
-                "Text to display when in Native mode");
-
-        if (configuration.hasChanged()) {
-            configuration.save();
+    public static void init(File configFile) {
+        if (config == null) {
+            config = new Configuration(configFile);
+            config.load();
         }
+        sync();
+    }
+
+    public static void sync() {
+        final Property P_API_Windows = config.get(
+                CATEGORIES[0],
+                "Windows",
+                API_Windows,
+                "Config the API to use on Windows platform. \nAvailable: TextServiceFramework, Imm32"
+        ).setLanguageKey(PREFIX + CATEGORIES[0] + ".windows").setValidValues(new String[]{"TextServiceFramework", "Imm32"}).setRequiresMcRestart(true);
+        if (Arrays.stream(P_API_Windows.getValidValues()).noneMatch(it -> it.equals(P_API_Windows.getString()))) {
+            P_API_Windows.set(P_API_Windows.getDefault());
+        }
+        API_Windows = P_API_Windows.getString();
+
+        UiLess_Windows = config.get(
+                CATEGORIES[1],
+                "Windows",
+                UiLess_Windows,
+                "Config if render in-game candidate list."
+        ).setLanguageKey(PREFIX + CATEGORIES[1] + ".windows").setRequiresMcRestart(true).getBoolean();
+
+        TurnOffOnMouseMove = config.get(
+                CATEGORIES[2],
+                "TurnOffOnMouseMove",
+                TurnOffOnMouseMove,
+                "Turn off Input Method on mouse move."
+        ).setLanguageKey(PREFIX + CATEGORIES[2] + ".turn_off_on_mouse_move").getBoolean();
+
+        AlphaModeText = config.get(
+                CATEGORIES[3],
+                "AlphaMode",
+                AlphaModeText,
+                "Text to display when in Alpha mode."
+        ).setLanguageKey(PREFIX + CATEGORIES[3] + ".alpha_mode").getString();
+
+        NativeModeText = config.get(
+                CATEGORIES[3],
+                "NativeMode",
+                NativeModeText,
+                "Text to display when in Native mode."
+        ).setLanguageKey(PREFIX + CATEGORIES[3] + ".native_mode").getString();
+
+        DebugLog = config.get(
+                CATEGORIES[4],
+                "DebugLog",
+                DebugLog,
+                "Config if print debug log."
+        ).setLanguageKey(PREFIX + CATEGORIES[4] + ".debug_log").getBoolean();
+
+        if (config.hasChanged()) {
+            config.save();
+        }
+    }
+
+    public static Configuration getConfig() {
+        return config;
     }
 }

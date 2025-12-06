@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 
 public class ClientProxy extends CommonProxy implements IMEventHandler {
     public static ClientProxy INSTANCE = null;
@@ -30,7 +32,8 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
     @SubscribeEvent
     public void onRenderScreen(GuiScreenEvent.DrawScreenEvent.Post event) {
         if (IMStates.getActiveControl().isVisible()) {
-            ClientProxy.Screen.setCaretPos(IMStates.getActiveControl().getCursorX(), IMStates.getActiveControl().getCursorY());
+            Point position = IMStates.getActiveControl().getCursorPos();
+            ClientProxy.Screen.setCaretPos(position.x, position.y);
             ClientProxy.Screen.draw();
         }
 
@@ -53,12 +56,20 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onConfigChanged(@Nonnull ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(Tags.MOD_ID)) {
+            Config.sync();
+        }
+    }
+
     public static IMEventHandler getIMEventHandler() {
         return IMEventHandler;
     }
 
+    @Override
     public void preInit(@Nonnull FMLPreInitializationEvent event) {
-        Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
+        Config.init(event.getSuggestedConfigurationFile());
         ClientRegistry.registerKeyBinding(KeyBind);
         Internal.loadLibrary();
         Internal.createInputCtx();
@@ -89,6 +100,7 @@ public class ClientProxy extends CommonProxy implements IMEventHandler {
 
     @Override
     public IMStates onScreenOpen(GuiScreen screen) {
+        IngameIME_Forge.logDebugInfo("Screen opened {}", screen);
         IMEventHandler newEventHandler = IMEventHandler.onScreenOpen(screen);
         if (newEventHandler != IMEventHandler) {
             IMEventHandler.onLeaveState();

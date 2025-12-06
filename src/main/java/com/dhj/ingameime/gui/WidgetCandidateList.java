@@ -114,17 +114,16 @@ public class WidgetCandidateList extends Widget {
         void draw(int x, int y, int textColor) {
             // 改为类似于 1.17 的 padding
             int offsetX = x + 2;
-            int baselineY = y;
 
             String idx = Integer.toString(index);
             int indexAreaW = getIndexAreaWidth();
             int idxTextW = mc.fontRenderer.getStringWidth(idx);
             int centeredX = offsetX + (indexAreaW - idxTextW) / 2;
-            mc.fontRenderer.drawString(idx, centeredX, baselineY, 0xFF555555);
+            mc.fontRenderer.drawString(idx, centeredX, y, 0xFF555555);
 
             // 渲染text
             offsetX += indexAreaW;
-            mc.fontRenderer.drawString(text, offsetX, baselineY, textColor);
+            mc.fontRenderer.drawString(text, offsetX, y, textColor);
         }
     }
 }

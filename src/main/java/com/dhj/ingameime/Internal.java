@@ -92,10 +92,13 @@ public class Internal {
 
         long hWnd = Loader.isModLoaded("cleanroom") ? getWindowHandle_LWJGL3() : getWindowHandle_LWJGL2();
         if (hWnd != 0) {
-            if (Minecraft.getMinecraft().isFullScreen()) Config.UiLess_Windows.set(true);
-            API api = Config.API_Windows.getString().equals("TextServiceFramework") ? API.TextServiceFramework : API.Imm32;
-            LOG.info("Using API: {}, UiLess: {}", api, Config.UiLess_Windows.getBoolean());
-            InputCtx = IngameIME.CreateInputContextWin32(hWnd, api, Config.UiLess_Windows.getBoolean());
+            if (Minecraft.getMinecraft().isFullScreen()) {
+                Config.UiLess_Windows = true;
+                Config.sync();
+            }
+            API api = Config.API_Windows.equals("TextServiceFramework") ? API.TextServiceFramework : API.Imm32;
+            LOG.info("Using API: {}, UiLess: {}", api, Config.UiLess_Windows);
+            InputCtx = IngameIME.CreateInputContextWin32(hWnd, api, Config.UiLess_Windows);
             LOG.info("InputContext has created!");
         } else {
             LOG.error("InputContext could not init as the hWnd is NULL!");
@@ -172,7 +175,7 @@ public class Internal {
         boolean isWindows = LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS;
 
         if (!isWindows) {
-            LOG.info("Unsupported platform: {}", LWJGLUtil.getPlatformName());
+            LOG.error("Unsupported platform: {}", LWJGLUtil.getPlatformName());
             return;
         }
 
@@ -210,7 +213,7 @@ public class Internal {
 
         try {
             InputCtx.setActivated(activated);
-            LOG.info("IM active state: {}", activated);
+            IngameIME_Forge.logDebugInfo("IM active state: {}", activated);
         } catch (Throwable t) {
             LOG.error("Failed to set IME active state. This indicates the InputContext may be stale. Attempting to recover.", t);
 

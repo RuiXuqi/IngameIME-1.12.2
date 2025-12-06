@@ -4,6 +4,9 @@ import com.dhj.ingameime.ClientProxy;
 import com.dhj.ingameime.mixins.vanilla.AccessorGuiTextField;
 import net.minecraft.client.gui.GuiTextField;
 
+import javax.annotation.Nonnull;
+import java.awt.*;
+
 public class VanillaTextFieldControl<T extends GuiTextField> extends AbstractControl<GuiTextField> {
 
     protected VanillaTextFieldControl(T control) {
@@ -15,18 +18,16 @@ public class VanillaTextFieldControl<T extends GuiTextField> extends AbstractCon
         return this.controlObject.getVisible();
     }
 
+    @Nonnull
     @Override
-    public int getCursorX() {
+    public Point getCursorPos() {
         AccessorGuiTextField accessor = (AccessorGuiTextField) this.controlObject;
-        return AbstractControl.getCursorX(accessor.getFont(), this.controlObject.getText(),
-                this.controlObject.x, this.controlObject.getWidth(),
+        return AbstractControl.getCursorPos(
+                accessor.getFont(), this.controlObject.getText(),
+                this.controlObject.x, this.controlObject.y, this.controlObject.width, this.controlObject.height,
                 accessor.getLineScrollOffset(), this.controlObject.getCursorPosition(), this.controlObject.getSelectionEnd(),
-                this.controlObject.getEnableBackgroundDrawing());
-    }
-
-    @Override
-    public int getCursorY() {
-        return AbstractControl.getCursorY(this.controlObject.y, this.controlObject.height, this.controlObject.getEnableBackgroundDrawing());
+                this.controlObject.getEnableBackgroundDrawing()
+        );
     }
 
     /**

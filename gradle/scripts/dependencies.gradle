@@ -25,6 +25,17 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name 'CodeChickenLib'
+                url 'https://maven.covers1624.net'
+            }
+        }
+        filter {
+            includeGroup 'mezz:jei'
+        }
+    }
     mavenLocal() // Must be last for caching to work
 }
 

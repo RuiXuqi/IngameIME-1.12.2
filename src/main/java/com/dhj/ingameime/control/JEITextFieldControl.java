@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 
 public class JEITextFieldControl extends VanillaTextFieldControl<GuiTextFieldFilter> {
 
@@ -28,18 +29,16 @@ public class JEITextFieldControl extends VanillaTextFieldControl<GuiTextFieldFil
         this.controlObject.setCursorPosition(cursorPos);
     }
 
+    @Nonnull
     @Override
-    public int getCursorX() {
-        AccessorGuiTextField accessor = (AccessorGuiTextField) this.controlObject;
-        return AbstractControl.getCursorX(accessor.getFont(), this.controlObject.getText(),
-                this.controlObject.x, this.controlObject.getWidth(),
+    public Point getCursorPos() {
+        com.dhj.ingameime.mixins.vanilla.AccessorGuiTextField accessor = (AccessorGuiTextField) this.controlObject;
+        return AbstractControl.getCursorPos(
+                accessor.getFont(), this.controlObject.getText(),
+                this.controlObject.x, this.controlObject.y, this.controlObject.width, this.controlObject.height,
                 accessor.getLineScrollOffset(), this.controlObject.getCursorPosition(), this.controlObject.getSelectionEnd(),
-                true);
-    }
-
-    @Override
-    public int getCursorY() {
-        return AbstractControl.getCursorY(this.controlObject.y, this.controlObject.height, true);
+                true
+        );
     }
 
     /**

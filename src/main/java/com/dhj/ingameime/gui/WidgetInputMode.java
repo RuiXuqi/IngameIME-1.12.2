@@ -2,6 +2,7 @@ package com.dhj.ingameime.gui;
 
 import ingameime.InputMode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 import static com.dhj.ingameime.Config.AlphaModeText;
 import static com.dhj.ingameime.Config.NativeModeText;
@@ -37,12 +38,14 @@ public class WidgetInputMode extends Widget {
     public void layout() {
         if (!isDirty) return;
 
-        Height = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
+        FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+
+        Height = font.FONT_HEIGHT;
 
         if (Mode == InputMode.AlphaNumeric)
-            Width = Minecraft.getMinecraft().fontRenderer.getStringWidth(AlphaModeText.getString());
+            Width = font.getStringWidth(AlphaModeText);
         else
-            Width = Minecraft.getMinecraft().fontRenderer.getStringWidth(NativeModeText.getString());
+            Width = font.getStringWidth(NativeModeText);
 
         super.layout();
     }
@@ -56,8 +59,8 @@ public class WidgetInputMode extends Widget {
         super.draw();
 
         if (Mode == InputMode.AlphaNumeric)
-            Minecraft.getMinecraft().fontRenderer.drawString(AlphaModeText.getString(), X + Padding, Y + Padding, TextColor);
+            Minecraft.getMinecraft().fontRenderer.drawString(AlphaModeText, X + Padding, Y + Padding, TextColor);
         else
-            Minecraft.getMinecraft().fontRenderer.drawString(NativeModeText.getString(), X + Padding, Y + Padding, TextColor);
+            Minecraft.getMinecraft().fontRenderer.drawString(NativeModeText, X + Padding, Y + Padding, TextColor);
     }
 }
