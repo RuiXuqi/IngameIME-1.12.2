@@ -20,7 +20,7 @@ Use `InputMethod` in **Full screen** Minecraft!
 - [tttsaurus](https://github.com/tttsaurus):Helped to fix the bug of InGameInfoXML 
 - [Andrea Frederica](https://github.com/AndreaFrederica):Patched a possible unknown crash issue with LoliASM(maybe
 - [Live-Block](https://github.com/Live-Block):Provides 1.17 UI and cursor following port
-- [RuiXuqi](https://github.com/RuiXuqi):More dynamic cursor tracking and project refactoring
+- [RuiXuqi](https://github.com/RuiXuqi):More dynamic cursor tracking and project refactoring, and port it back to 1.7.10
 - There will be more in the future :)
 
 ## Bug
